@@ -238,6 +238,26 @@ function replaceTokens(html) {
 }
 
 async function processComponent(url, component) {
+  // Debug logging
+  console.log('\n=== Component Debug Info ===')
+  console.log('Component:', {
+    id: component.id,
+    title: component.title,
+    // Log the first level of properties
+    properties: Object.keys(component)
+  })
+  
+  // If snippets exists, log its structure
+  if (component.snippets) {
+    console.log('Snippets structure:', {
+      count: component.snippets.length,
+      firstSnippet: component.snippets[0]
+    })
+  } else {
+    console.log('Snippets is undefined. Full component:', JSON.stringify(component, null, 2))
+  }
+  console.log('========================\n')
+
   const title = component.name
   const filename = cleanFilename(title)
 
