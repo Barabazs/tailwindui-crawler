@@ -266,11 +266,19 @@ async function processComponent(url, component) {
   const path = `${localOutput}/${filename}`
 
   // output snippets by language
-  component.snippets.forEach((snippet) => {
-    const language = snippet.language.toLowerCase()
-    if (!languages.includes(language)) return
-    saveLanguageContent(path, language, snippet.snippet)
-  })
+  if (component.snippets) {
+    component.snippets.forEach((snippet) => {
+      const language = snippet.language.toLowerCase()
+      if (!languages.includes(language)) return
+      saveLanguageContent(path, language, snippet.snippet)
+    })
+  } else {
+    if (component.snippet) {
+      const language = component.snippet.language.toLowerCase()
+      if (!languages.includes(language)) return
+      saveLanguageContent(path, language, component.snippet)
+    }
+  }
 
   // save resources required by snippet preview
   const html = component.iframeHtml
