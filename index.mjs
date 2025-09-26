@@ -723,7 +723,9 @@ function countFilesRecursively(dirPath) {
       )
       if (missedCategories.length > 0) {
         console.log(
-          `⚠️ Warning: These categories might not have been processed: ${missedCategories.join(', ')}`,
+          `⚠️ Warning: These categories might not have been processed: ${missedCategories.join(
+            ', ',
+          )}`,
         )
       } else {
         console.log(`✅ All requested categories were processed successfully`)
