@@ -241,7 +241,9 @@ async function putData(url, data) {
   if (process.env.DEBUG === '1') {
     console.log(`Debug: PUT request to ${url}`)
     console.log(`Debug: PUT body: ${body}`)
-    console.log(`Debug: XSRF token: ${cookies['XSRF-TOKEN'] ? 'present' : 'missing'}`)
+    console.log(
+      `Debug: XSRF token: ${cookies['XSRF-TOKEN'] ? 'present' : 'missing'}`,
+    )
   }
 
   return fetchHttps(
@@ -249,10 +251,10 @@ async function putData(url, data) {
     {
       method: 'PUT',
       headers: {
-        'Accept': 'text/html, application/xhtml+xml',
+        Accept: 'text/html, application/xhtml+xml',
         'Content-Type': 'application/json',
         'Content-Length': Buffer.byteLength(body),
-        'Cookie': getCookieHeader(cookies),
+        Cookie: getCookieHeader(cookies),
         'X-Requested-With': 'XMLHttpRequest',
         'X-Inertia': 'true',
         'X-XSRF-TOKEN': cookies['XSRF-TOKEN'],
@@ -264,9 +266,9 @@ async function putData(url, data) {
 
 async function setComponentLanguage(uuid, language) {
   const languageMap = {
-    'html': 'html-v4-system',
-    'react': 'react-v4-system',
-    'vue': 'vue-v4-system'
+    html: 'html-v4-system',
+    react: 'react-v4-system',
+    vue: 'vue-v4-system',
   }
 
   const snippetLang = languageMap[language]
@@ -280,21 +282,30 @@ async function setComponentLanguage(uuid, language) {
   try {
     const response = await putData('/ui-blocks/language', {
       uuid: uuid,
-      snippet_lang: snippetLang
+      snippet_lang: snippetLang,
     })
 
     if (process.env.DEBUG === '1') {
       console.log(`Debug: Language API response status: ${response.status}`)
       const responseText = await response.text()
-      console.log(`Debug: Language API response body: ${responseText.slice(0, 200)}`)
+      console.log(
+        `Debug: Language API response body: ${responseText.slice(0, 200)}`,
+      )
     }
-    
+
     // Check for various success status codes (including redirects)
-    if (response.status === 200 || response.status === 204 || response.status === 302 || response.status === 303) {
+    if (
+      response.status === 200 ||
+      response.status === 204 ||
+      response.status === 302 ||
+      response.status === 303
+    ) {
       return true
     }
 
-    console.log(`⚠️  Language API returned status ${response.status} for ${language}`)
+    console.log(
+      `⚠️  Language API returned status ${response.status} for ${language}`,
+    )
     return false
   } catch (error) {
     console.log(`❌ Error setting language ${language}: ${error.message}`)
@@ -321,9 +332,13 @@ async function fetchUpdatedComponent(url, uuid) {
     }
 
     // Find the component with matching UUID
-    const component = data.props.subcategory.components.find(c => c.uuid === uuid)
+    const component = data.props.subcategory.components.find(
+      (c) => c.uuid === uuid,
+    )
     if (!component) {
-      console.log(`⚠️  Component with UUID ${uuid} not found in re-fetched data`)
+      console.log(
+        `⚠️  Component with UUID ${uuid} not found in re-fetched data`,
+      )
       return null
     }
 
@@ -435,7 +450,9 @@ async function processComponent(url, component) {
 
   // Check if component has UUID for language switching
   if (!component.uuid) {
-    console.log(`⚠️  No UUID found for component ${title}, skipping multi-language support`)
+    console.log(
+      `⚠️  No UUID found for component ${title}, skipping multi-language support`,
+    )
     return
   }
 
@@ -647,7 +664,11 @@ async function saveTemplates() {
         },
       }
     }
-    const response = await fetchWithRetry(url + '/download', retries, options)
+    const response = await fetchWithRetry(
+      fullUrl + '/download',
+      retries,
+      options,
+    )
     // check etag
     if (response.status === 304) {
       continue
