@@ -461,6 +461,14 @@ async function processComponent(url, component) {
 
     // Save the language-specific code
     const snippet = updatedComponent.snippet
+
+    // Sanity check to debug potential mismatches
+    if (snippet.name != language && snippet.mode != 'system') {
+      console.warn(
+        `⚠️  Warning: Snippet language mismatch for ${title}: expected ${language}, got ${snippet.name} (${snippet.mode})`,
+      )
+    }
+
     if (snippet.code && snippet.code.trim()) {
       console.log(`✅ Saving ${language} code for ${title}`)
       await saveLanguageContent(path, language, snippet.code)
