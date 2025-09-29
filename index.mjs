@@ -374,8 +374,12 @@ async function processComponentPage(url) {
   }
 
   const data = JSON.parse(json)
-  console.log(`Debug: data structure:`, Object.keys(data))
-  console.log(`Debug: props structure:`, Object.keys(data.props || {}))
+  if (process.env.DEBUG === '1') {
+    console.log(`Debug: data structure keys: [${Object.keys(data).join(',')}]`)
+    console.log(
+      `Debug: props structure keys: [${Object.keys(data.props || {}).join(',')}]`,
+    )
+  }
 
   if (
     !data.props ||
@@ -395,7 +399,11 @@ async function processComponentPage(url) {
 
   // Debug the structure of the first component
   if (components.length > 0) {
-    console.log(`Debug: first component structure:`, Object.keys(components[0]))
+    if (process.env.DEBUG === '1') {
+      console.log(
+        `Debug: first component structure keys: [${Object.keys(components[0]).join(',')}]`,
+      )
+    }
   }
 
   for (let i = 0; i < components.length; i++) {
